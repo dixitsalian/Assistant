@@ -1,0 +1,36 @@
+ <div class="sv-input-form">
+  <div class="sv-input-form-container">
+    <div class="sv-input-form-label">
+      <h4>Device</h4>
+    </div>
+    <div class="sv-input-form-content">
+      <mat-form-field>
+        <mat-select [disabled]="disable" placeholder="Devices" (selectionChange)="changeDevice($event)">
+          @for (item of data.device; track item.id) {
+            <mat-option [value]="item.id">{{item.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="sv-input-form-container">
+    <div class="sv-input-form-label">
+      <h4>Programmer </h4>
+    </div>
+    <div class="sv-input-form-content">
+      <mat-form-field>
+        <mat-select [disabled]="disable" placeholder="Programmer" (selectionChange)="changeProgrammer($event)">
+          @for (item of data.programmer; track item.id) {
+            <mat-option [value]="item.id">{{item.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+ </div>
+  
+  
+
+  
+  
+

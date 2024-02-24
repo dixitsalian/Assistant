@@ -1,0 +1,18 @@
+<div class="duplication-container">
+  <div class="title">
+    <h2>Duplication</h2>
+    <p>Please enter the name for a new device</p>
+    <mat-form-field class="example-full-width">
+      <mat-label>Device</mat-label>
+      <input
+        matInput
+        placeholder="Device"
+        [ngModel]="name"
+        (ngModelChange)="onDeviceNameChanged($event)"
+      />
+    </mat-form-field>
+  </div>
+  <div class="button-container">
+    <button mat-flat-button color="primary" (click)="onNextClick()">Next</button>
+  </div>
+</div>

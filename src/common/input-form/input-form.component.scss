@@ -1,0 +1,23 @@
+.sv-input-form {
+  padding: 1em;
+  border-bottom: 1px solid;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+
+  .sv-input-form-container {
+    display: flex;
+    flex-direction: row;
+
+    .sv-input-form-label {
+      flex: 0 0 30%;
+    }
+    .sv-input-form-content {
+      flex-grow: 3;
+      
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}

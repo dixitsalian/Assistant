@@ -1,0 +1,23 @@
+div.result-container {
+  text-align: center;
+
+  h2 {
+    margin: 15px 10px;
+  }
+
+  h4 {
+    margin: 10px 0;
+  }
+
+  p.device-name {
+    margin-top: 15%;
+  }
+
+  ul.device-list {
+    display: inline-block;
+    text-align: left;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+}
