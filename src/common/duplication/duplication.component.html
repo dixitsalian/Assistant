@@ -6,13 +6,20 @@
       <mat-label>Device</mat-label>
       <input
         matInput
+        [formControl]="deviceNameField"
         placeholder="Device"
-        [ngModel]="name"
+        [ngModel]="deviceNameField.value"
         (ngModelChange)="onDeviceNameChanged($event)"
+        required
       />
+      @if (deviceNameField.hasError('uniqueName')) {
+        <mat-error>You must enter a unique device name.</mat-error>
+      }
     </mat-form-field>
   </div>
   <div class="button-container">
-    <button mat-flat-button color="primary" (click)="onNextClick()">Next</button>
+    <button [disabled]="deviceNameField.hasError('uniqueName')" mat-flat-button color="primary" (click)="onNextClick()">
+      Next
+    </button>
   </div>
 </div>

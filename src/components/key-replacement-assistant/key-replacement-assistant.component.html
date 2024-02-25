@@ -1,6 +1,6 @@
 <div class="kra-container">
-  <input-form 
-    [data]="deviceData" 
+    <input-form 
+        [data]="deviceData" 
     [disable]="activeInputForm" 
     (formValid)="onFormValid($event)" 
     (valueChanged)="onInputFormValueChange($event.device)">
@@ -14,7 +14,7 @@
         <invalidation (invalidCheckAction)="changeTemplate($event)"></invalidation>
     </ng-template>
     <ng-template>
-      <duplication [deviceName]="currentDevice" (nextClicked)="changeTemplate($event.state);"></duplication>
+      <duplication (nextClicked)="changeTemplate($event.state);" (onDeviceChanged)="updateCurrentDeviceData($event)"></duplication>
     </ng-template>
     <ng-template>
         <programming (programmingAction)="changeTemplate($event)"></programming>

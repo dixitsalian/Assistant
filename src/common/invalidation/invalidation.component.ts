@@ -8,12 +8,12 @@ import { take, finalize } from 'rxjs/operators';
   selector: 'invalidation',
   standalone: true,
   imports: [MatProgressBarModule, MatButtonModule],
-  templateUrl: './invalidation.component.html',
+    templateUrl: './invalidation.component.html',
   styleUrl: './invalidation.component.scss'
 })
 export class InvalidationComponent {
  
-  @Output() invalidCheckAction = new EventEmitter<string>();
+    @Output() invalidCheckAction = new EventEmitter<string>();
   mode: ProgressBarMode = 'determinate';
   progress = 0;
 
@@ -26,8 +26,8 @@ export class InvalidationComponent {
         take(totalSteps),
         finalize(() => {
           this.progress = 100;
-          this.invalidCheckAction.emit('success');
-        })
+                        this.invalidCheckAction.emit('success');
+                    })
     ).subscribe(() => {
         this.progress += (100 / totalSteps);
     });

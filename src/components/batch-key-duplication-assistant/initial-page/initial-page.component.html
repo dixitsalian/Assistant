@@ -1,0 +1,23 @@
+<div class="initial-page-container">
+  <div class="title">
+    <p>
+      Please select a device for duplication process and enter the amount of new
+      devices to be created.
+    </p>
+    <input
+      matInput
+      placeholder="Number of Device for duplication"
+      [(ngModel)]="noOfDevice"
+    />
+  </div>
+  <div class="button-container">
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="!(disable && +noOfDevice != 0)"
+      (click)="onNextClick.emit({ action: 'success', data: noOfDevice })"
+    >
+      Next
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+
+
+<input-form [data]="deviceData" [disable]="activeInputForm" (formValid)="onFormValid($event)" (valueChanged)="onInputFormValueChange($event.device)"></input-form>
+<ng-container [ngTemplateOutlet]="getCurrentTemplate() || default"></ng-container>
+<ng-template>
+    <initial-page (onNextClick)="changeTemplate($event.action);updateNoOfDuplicationDevice($event.data)" [disable]="activeForm"></initial-page>
+</ng-template>
+<ng-template>
+  <duplication (nextClicked)="changeTemplate($event.state);" (onDeviceChanged)="updateCurrentDeviceData($event)"></duplication>
+</ng-template>
+<ng-template>
+    <programming (programmingAction)="changeTemplate($event)"></programming>
+</ng-template>
+<ng-template>
+    <result [deviceNames]="devicesToBeDuplicated"></result>
+</ng-template>
+<ng-template #default>
+  <div class="title-container">
+    <h2>Loading....</h2>
+  </div>
+</ng-template>
+
+  

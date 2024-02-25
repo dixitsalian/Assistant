@@ -1,9 +1,10 @@
-import { Component, Inject, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, Inject, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogContent
 } from '@angular/material/dialog';
+import { delay, of } from 'rxjs';
 
 @Component({
   selector: 'dialog',
@@ -15,7 +16,7 @@ import {
       </mat-dialog-content>
   `
 })
-export class DialogComponent {
+export class DialogComponent implements AfterViewInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   componentData: {component: Type<unknown>};
   constructor(
@@ -26,8 +27,12 @@ export class DialogComponent {
   }
 
   loadComponent(component: Type<unknown>): void {
-    this.dynamicComponentContainer.clear();
-    this.dynamicComponentContainer.createComponent(component);
+    of(null).pipe(
+      delay(0)
+    ).subscribe(() => {
+      this.dynamicComponentContainer.clear();
+      this.dynamicComponentContainer.createComponent(component);
+    });
   }
 
   ngAfterViewInit() {

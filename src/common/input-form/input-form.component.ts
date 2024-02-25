@@ -6,6 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { InvalidationComponent } from '../invalidation/invalidation.component';
 import { KeyReplacementAssistantComponent } from '../../components/key-replacement-assistant/key-replacement-assistant.component';
+import { Device } from '../../interfaces/data.interface';
 
 export interface InputFormData { device: string, programmer: string}
 
@@ -18,7 +19,7 @@ export interface InputFormData { device: string, programmer: string}
 })
 export class InputFormComponent {
   @Input() disable: boolean = false;
-  @Input() data!: {device: {id: string, name: string}[], programmer: {id: string, name: string}[]};
+  @Input() data!: {device: Device[], programmer: {id: string, name: string}[]};
   @Output() valueChanged = new EventEmitter<InputFormData>;
   @Output() formValid = new EventEmitter<boolean>;
   
@@ -26,8 +27,8 @@ export class InputFormComponent {
     device: '',
     programmer: ''
   }
-  
- 
+
+   
   changeDevice(event: MatSelectChange) {
     this.selectedData.device = event.value;
     this.valueChanged.emit(this.selectedData);
@@ -35,7 +36,7 @@ export class InputFormComponent {
   }
 
   changeProgrammer(event: MatSelectChange) {
-    this.selectedData.programmer = event.value;
+this.selectedData.programmer = event.value;
     this.valueChanged.emit(this.selectedData);
     this.formValid.emit(!!(this.selectedData.device && this.selectedData.programmer));
     

@@ -1,4 +1,10 @@
-import { Component, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  QueryList,
+  TemplateRef,
+  ViewChildren,
+} from '@angular/core';
 import { InitialPageComponent } from './initial-page/initial-page.component';
 import { DuplicationComponent } from '../../common/duplication/duplication.component';
 import { InvalidationComponent } from '../../common/invalidation/invalidation.component';
@@ -7,13 +13,23 @@ import { ResultComponent } from '../../common/result/result.component';
 import { TemplateService } from '../../service/template.service';
 import { NgTemplateOutlet } from '@angular/common';
 import { InputFormComponent } from '../../common/input-form/input-form.component';
+import { DataService } from '../../service/data.service';
+import { Device, DeviceData } from '../../interfaces/data.interface';
 
 @Component({
   selector: 'key-replacement-assistant',
   standalone: true,
-  imports: [InitialPageComponent, DuplicationComponent, InvalidationComponent, ProgrammingComponent, ResultComponent, InputFormComponent, NgTemplateOutlet],
+  imports: [
+    InitialPageComponent,
+    DuplicationComponent,
+    InvalidationComponent,
+    ProgrammingComponent,
+    ResultComponent,
+    InputFormComponent,
+    NgTemplateOutlet
+  ],
   templateUrl: './key-replacement-assistant.component.html',
-  styleUrl: './key-replacement-assistant.component.scss'
+  styleUrl: './key-replacement-assistant.component.scss',
 })
 export class KeyReplacementAssistantComponent implements OnInit {
   @ViewChildren(TemplateRef) templates!: QueryList<TemplateRef<unknown>>;
@@ -21,25 +37,20 @@ export class KeyReplacementAssistantComponent implements OnInit {
   currentTemplate: string = '0';
   activeForm: boolean = false;
   activeInputForm: boolean = false;
-  currentDevice!: {id: string, name: string};
-  deviceData!: {device:  {id: string, name: string}[], programmer: {id: string, name: string}[]};
-  
-  constructor(private templateService: TemplateService) {}
+  currentDevice!: Device;
+  deviceData!: DeviceData;
+  uniqueDeviceName: boolean = false;
+
+  constructor(
+    private templateService: TemplateService,
+    private dataService: DataService
+  ) {}
+
   ngOnInit(): void {
-    this.deviceData = {
-      device: [
-        {id: 'device1', name: 'Device 1'},
-        {id: 'device2', name: 'Device 2'},
-        {id: 'device3', name: 'Device 3'},
-        {id: 'device4', name: 'Device 4'}
-      ],
-      programmer: [
-        {id: 'smartCD', name: 'Smart CD'},
-        {id: 'smartStickAx', name: 'Smart Stick AX'},
-        {id: 'smartDrive', name: 'Smart Drive'},
-        {id: 'onlineSW', name: 'Online SW'},
-      ]
-    };
+    this.dataService.getDeviceData().subscribe((data) => {
+      this.deviceData = data;
+      this.currentDevice = data.device[0];
+    });
   }
 
   changeTemplate(action: string): void {
@@ -47,12 +58,15 @@ export class KeyReplacementAssistantComponent implements OnInit {
     if (action === 'success') {
       this.currentTemplate = (parseInt(this.currentTemplate) + 1).toString();
     } else if (action === 'failure') {
+      if (this.currentTemplate === '1') this.activeInputForm = false;
       this.currentTemplate = (parseInt(this.currentTemplate) - 1).toString();
-      this.activeInputForm = false;
     }
-    
   }
 
+  updateCurrentDeviceData(event: any) {
+    this.currentDevice = event.device;
+  }
+  
   getCurrentTemplate(): TemplateRef<unknown> | undefined {
     if (!this.currentTemplate) {
       return;
@@ -67,11 +81,12 @@ export class KeyReplacementAssistantComponent implements OnInit {
   }
 
   onInputFormValueChange(device: string): void {
-    this.currentDevice = this.deviceData.device.filter(d => d.id === device)[0];
+    this.currentDevice = this.deviceData.device.filter(
+      (d) => d.id === device
+    )[0];
   }
 
   onFormValid(event: boolean): void {
     this.activeForm = event;
   }
-
 }

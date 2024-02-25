@@ -1,34 +1,50 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
+import { Device } from '../result/result.component';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { CommonModule, NgIf } from '@angular/common';
+import { DataService } from '../../service/data.service';
 
 @Component({
   selector: 'duplication',
   standalone: true,
-  imports: [MatInputModule, FormsModule, MatButtonModule],
+  imports: [MatInputModule, FormsModule, MatButtonModule, NgIf, ReactiveFormsModule, CommonModule],
+  providers: [DataService],
   templateUrl: './duplication.component.html',
-  styleUrl: './duplication.component.scss'
+  styleUrl: './duplication.component.scss',
 })
 export class DuplicationComponent implements OnInit {
-  
-  @Input() deviceName!: {id: string, name: string};
-  @Output() nextClicked = new EventEmitter<{state: string, device: {id: string, name: string}}>;
-  name: string = '';
 
-  ngOnInit(): void {
-    this.name = this.deviceName?.name;
-  }
+  
+  @Output() nextClicked = new EventEmitter<{ state: string }>();
+  @Output() onDeviceChanged = new EventEmitter<{device :Device}>();
+  deviceNameField = new FormControl('', [Validators.required, Validators.email]);
+  
+  ngOnInit(): void { }
+  
+  constructor(private dataService: DataService) {}
 
   onNextClick() {
-    if (this.deviceName) {
-      this.deviceName.name = this.name;
+    if (!this.deviceNameField.value) {
+      this.deviceNameField.setErrors({ 'uniqueName': true });
+      return;
     }
-    this.nextClicked.emit({state: 'success', device: this.deviceName});
+    this.dataService.duplicateDevice(this.deviceNameField.value).subscribe(
+      (response) => {
+        if (response) {
+          this.onDeviceChanged.emit({'device': response as Device});
+          this.nextClicked.emit({ state: 'success' });
+        } else {
+          this.deviceNameField.setErrors({ 'uniqueName': true });
+        }
+      }
+    )
+    
   }
 
-  onDeviceNameChanged(event: string) {
-    this.name = event;
-    
+  onDeviceNameChanged(name: string): void {
+    this.deviceNameField.setErrors({ 'uniqueName': false });
   }
 }
